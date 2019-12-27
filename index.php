@@ -1,36 +1,47 @@
 <?php
-  # define the number of hosts
-  #define("HOSTCOUNT", 9);
-
   # define the c3pixelflut server
   define("HOST", gethostbyname("wall.c3pixelflut.de"));
   define("PORT", 1234);
 
-  # get hostid to to split-up calculations
-  $hostid = intval(explode("-", gethostname())[1]);
-
   # read pixels from file
   $pixels = file(__DIR__."/pixels.txt", FILE_SKIP_EMPTY_LINES);
   if (false !== $pixels) {
-    # calculate the chunk size
-    #$chunksize = ceil(count($pixels)/HOSTCOUNT);
-
-    # get subpixels based on the hostid and the chunksize
-    #$subpixels = array_slice($pixels, ($hostid-1)*$chunksize, $chunksize);
-    #if (0 < count($subpixels)) {
-      # establish a socket connection
-      if (false !== ($socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP))) {
-        try {
+    $socket = false;
+    do {
+      # we need to establish a connection
+      if (false === $socket) {
+        if (false !== ($socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP))) {
           if (false !== socket_connect($socket, HOST, PORT)) {
-            do {
-              for ($i = 0; $i < count($pixels); $i++) {
-                socket_write($socket, $pixels[$i]);
-              }
-            } while (true);
+            printf("%s: Connection established.\n", date("c"));
+          } else {
+            # connection failed
+            try {
+              socket_close($socket);
+            } finally {
+              $socket = false;
+            }
+
+            # wait a bit before retrying
+            sleep(5);
           }
-        } finally {
-          socket_close($socket);
         }
       }
-    #}
+
+      # we have an established connection
+      if (false !== $socket) {
+        for ($i = 0; $i < count($pixels); $i++) {
+          if (false === socket_write($socket, $pixels[$i])) {
+            # try to close the broken socket
+            try {
+              socket_close($socket);
+            } finally {
+              $socket = false;
+            }
+
+            # do not proceed with the current round
+            break;
+          }
+        }
+      }
+    } while (true);
   }

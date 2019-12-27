@@ -1,6 +1,6 @@
 <?php
   # define the number of hosts
-  define("HOSTCOUNT", 9);
+  #define("HOSTCOUNT", 9);
 
   # define the c3pixelflut server
   define("HOST", gethostbyname("wall.c3pixelflut.de"));
@@ -13,18 +13,18 @@
   $pixels = file(__DIR__."/pixels.txt", FILE_SKIP_EMPTY_LINES);
   if (false !== $pixels) {
     # calculate the chunk size
-    $chunksize = ceil(count($pixels)/HOSTCOUNT);
+    #$chunksize = ceil(count($pixels)/HOSTCOUNT);
 
     # get subpixels based on the hostid and the chunksize
-    $subpixels = array_slice($pixels, ($hostid-1)*$chunksize, $chunksize);
-    if (0 < count($subpixels)) {
+    #$subpixels = array_slice($pixels, ($hostid-1)*$chunksize, $chunksize);
+    #if (0 < count($subpixels)) {
       # establish a socket connection
       if (false !== ($socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP))) {
         try {
           if (false !== socket_connect($socket, HOST, PORT)) {
             do {
-              for ($i = 0; $i < count($subpixels); $i++) {
-                socket_write($socket, $subpixels[$i]);
+              for ($i = 0; $i < count($pixels); $i++) {
+                socket_write($socket, $pixels[$i]);
               }
             } while (true);
           }
@@ -32,5 +32,5 @@
           socket_close($socket);
         }
       }
-    }
+    #}
   }

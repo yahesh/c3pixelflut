@@ -1,6 +1,6 @@
 <?php
   # define the number of hosts
-  define("HOSTCOUNT", 1);
+  define("HOSTCOUNT", 9);
 
   # define the c3pixelflut server
   define("HOST", gethostbyname("wall.c3pixelflut.de"));

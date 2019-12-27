@@ -3,6 +3,13 @@
   define("HOST", gethostbyname("wall.c3pixelflut.de"));
   define("PORT", 1234);
 
+  # disable error output
+  error_reporting(0);
+  ini_set("display_errors",         0);
+  ini_set("display_startup_errors", 0);
+  ini_set("html_errors",            0);
+  ini_set("track_errors",           0);
+
   # read pixels from file
   $pixels = file(__DIR__."/pixels.txt", FILE_SKIP_EMPTY_LINES);
   if (false !== $pixels) {

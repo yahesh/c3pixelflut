@@ -4,7 +4,7 @@
   define("PORT", 1234);
 
   # define sleep time on disconnects in seconds
-  define("SLEEPTIME", 60);
+  define("SLEEPTIME", 300);
 
   # disable error output
   error_reporting(0);
@@ -22,6 +22,7 @@
       if (false === $socket) {
         if (false !== ($socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP))) {
           if (false !== socket_connect($socket, HOST, PORT)) {
+            # give some output
             printf("%s: Connection established.\n", date("c"));
           } else {
             # connection failed
@@ -30,6 +31,9 @@
             } finally {
               $socket = false;
             }
+
+            # give some output
+            printf("%s: Connection failed.\n", date("c"));
 
             # wait a bit before retrying
             sleep(SLEEPTIME);
@@ -47,6 +51,9 @@
             } finally {
               $socket = false;
             }
+
+            # give some output
+            printf("%s: Connection dropped.\n", date("c"));
 
             # do not proceed with the current round
             break;

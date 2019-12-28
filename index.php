@@ -4,7 +4,7 @@
   define("PORT", 1234);
 
   # define sleep time on disconnects in seconds
-  define("SLEEPTIME", 300);
+  define("SLEEPTIME", 60);
 
   # disable error output
   error_reporting(0);
@@ -34,9 +34,6 @@
 
             # give some output
             printf("%s: Connection failed.\n", date("c"));
-
-            # wait a bit before retrying
-            sleep(SLEEPTIME);
           }
         }
       }
@@ -59,6 +56,11 @@
             break;
           }
         }
+      }
+
+      if (false === $socket) {
+        # wait a bit before retrying
+        sleep(SLEEPTIME);
       }
     } while (true);
   }

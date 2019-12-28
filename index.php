@@ -3,6 +3,9 @@
   define("HOST", gethostbyname("wall.c3pixelflut.de"));
   define("PORT", 1234);
 
+  # define sleep time on disconnects in seconds
+  define("SLEEPTIME", 60);
+
   # disable error output
   error_reporting(0);
   ini_set("display_errors",         0);
@@ -29,7 +32,7 @@
             }
 
             # wait a bit before retrying
-            sleep(5);
+            sleep(SLEEPTIME);
           }
         }
       }

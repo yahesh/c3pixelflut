@@ -1,6 +1,6 @@
 <?php
   # define the c3pixelflut server
-  define("HOST", gethostbyname("wall2.c3pixelflut.de"));
+  define("HOST", gethostbyname("wall.c3pixelflut.de"));
   define("PORT", 1234);
 
   # define sleep time on disconnects in seconds

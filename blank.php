@@ -1,10 +1,11 @@
 <?php
   # define the c3pixelflut server
-  define("HOST", gethostbyname("wall.c3pixelflut.de"));
+  define("HOST", "2001:67c:20a1:1111:2051:5dff:feda:2983");
+  #define("HOST", gethostbyname("wall.c3pixelflut.de"));
   define("PORT", 1234);
 
   # define sleep time on disconnects in seconds
-  define("SLEEPTIME", 60);
+  define("SLEEPTIME", 1);
 
   # disable error output
   error_reporting(0);
@@ -14,13 +15,13 @@
   ini_set("track_errors",           0);
 
   # read pixels from file
-  $pixels = file(__DIR__."/blank.txt", FILE_SKIP_EMPTY_LINES);
+  $pixels = file(__DIR__."/pixels2.txt", FILE_SKIP_EMPTY_LINES);
   if (false !== $pixels) {
     $socket = false;
     do {
       # we need to establish a connection
       if (false === $socket) {
-        if (false !== ($socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP))) {
+        if (false !== ($socket = socket_create(AF_INET6, SOCK_STREAM, SOL_TCP))) {
           if (false !== socket_connect($socket, HOST, PORT)) {
             # give some output
             printf("%s: Connection established.\n", date("c"));
@@ -60,7 +61,7 @@
 
       if (false === $socket) {
         # wait a bit before retrying
-        #sleep(SLEEPTIME);
+        sleep(SLEEPTIME);
       }
     } while (true);
   }

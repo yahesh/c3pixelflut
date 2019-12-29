@@ -60,7 +60,7 @@
 
       if (false === $socket) {
         # wait a bit before retrying
-        sleep(SLEEPTIME);
+        #sleep(SLEEPTIME);
       }
     } while (true);
   }
